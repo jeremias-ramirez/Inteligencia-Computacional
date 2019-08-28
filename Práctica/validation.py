@@ -6,10 +6,7 @@ Created on Thu Aug 22 16:22:40 2019
 """
 import numpy as np
 
-def validation(data, w):
-    H, W = data.shape
-    trn = np.append(-np.ones((len(data[:,1]),1)),data[:, 0:W-1],1)
-    yd = data[:, W-1]
+def validation(trn,yd, w):
     accur = 0
     
     for j in range(len(trn[:,0])):

@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
-"""
-Spyder Editor
-
-This is a temporary script file.
-"""
 
 import csv
 import numpy as np
-from random import shuffle
 
-def getPartitions(data, porcenTrain):
+def getPartition(data, porcenTrain):
     H, W = data.shape
     indexs = np.arange(0, H, 1)
     

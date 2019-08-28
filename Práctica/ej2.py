@@ -16,17 +16,27 @@ data = np.genfromtxt("spheres1d10.csv", delimiter = ",")
 epoc = 10
 cantEntrenam = 20
 H, W = data.shape
-
+accurV = np.zeros((cantEntrenam,1))
 for i in range(cantEntrenam):
-    tupla = vc.getPartitions(data, 0.80)        
+    tupla = vc.getPartition(data, 0.80)        
     dataTrain = data[tupla[1],:]
     w = np.random.uniform(-0.5,0.5,W)
+    
+    H, W = dataTrain.shape
+    trn = np.append(-np.ones((len(dataTrain[:,1]),1)),dataTrain[:, 0:W-1],1)
+    yd = dataTrain[:, W-1]
+
     for j in range (epoc):
-        w = trn.trainning(dataTrain, w, 0.2)
-        desempeñoV = val.validation(dataTrain, w)
+        w = trn.trainning(trn,yd, w, 0.2)
+        desempeñoV = val.validation(trn,yd, w)
     
     dataTest = data[tupla[0],:]
-    desempeñoP = val.validation(dataTest, w)
+   
+    H, W = dataTest.shape
+    test = np.append(-np.ones((len(dataTest[:,1]),1)),dataTest[:, 0:W-1],1)
+    yd = dataTest[:, W-1]
+
+    desempeñoP = val.validation(test,yd, w)
 
     accurV[i]=desempeñoP/len(dataTest[:,1])
     
