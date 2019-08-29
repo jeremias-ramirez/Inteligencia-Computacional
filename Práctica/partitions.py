@@ -17,7 +17,7 @@ def getPartitions(data, porcenTrain):
 
     return vPrueba, vTrain
 
-def getPartitionsk_fold(data, porcenTrain):
+def getPartitionsk_fold(data, porcenTrain,k):
     H, W = data.shape
     indexs = np.arange(0, H, 1)
     
@@ -26,8 +26,7 @@ def getPartitionsk_fold(data, porcenTrain):
     
     vPrueba = indexs[k*cantPrueba:(k+1)*cantPrueba]
      
-    vTrain = indexs[cantPrueba::]
-
+    vTrain = indexs[!(k*cantPrueba:(k+1)*cantPrueba)]
     return vPrueba, vTrain
 
 def k_fold(data,k,epoc):
