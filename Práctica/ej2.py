@@ -7,18 +7,18 @@ Created on Thu Aug 22 10:33:13 2019
 import numpy as np
 from matplotlib import pyplot as plt
 import math
-import trainning as trn
+import trainning as train
 import validation as val
 import val_cruzada_ej2 as vc
 
-data = np.genfromtxt("spheres1d10.csv", delimiter = ",")
+data = np.genfromtxt("files/spheres1d10.csv", delimiter = ",")
 
 epoc = 10
 cantEntrenam = 20
 H, W = data.shape
 accurV = np.zeros((cantEntrenam,1))
 for i in range(cantEntrenam):
-    tupla = vc.getPartition(data, 0.80)        
+    tupla = vc.getPartitions(data, 0.80)        
     dataTrain = data[tupla[1],:]
     w = np.random.uniform(-0.5,0.5,W)
     
@@ -27,7 +27,7 @@ for i in range(cantEntrenam):
     yd = dataTrain[:, W-1]
 
     for j in range (epoc):
-        w = trn.trainning(trn,yd, w, 0.2)
+        w = train.trainning(trn, yd, w, 0.2)
         desempeñoV = val.validation(trn,yd, w)
     
     dataTest = data[tupla[0],:]
