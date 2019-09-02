@@ -14,4 +14,4 @@ def validation(trn,yd, w):
         y = 1 if z >= 0 else -1
         error=yd[j] - y
         accur = (accur + 1 if error == 0 else accur)
-    return accur
+    return accur/len(trn[:,0])
