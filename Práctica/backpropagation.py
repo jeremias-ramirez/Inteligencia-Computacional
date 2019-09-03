@@ -23,21 +23,28 @@ def derLineNoLine(y):
 
     
 def backpropagation(w,y,yd,vel):
-    errorV = yd[:]-y[-1][1:] # el ultimo vector de las lista y no tengo en cuenta el -1
     derL_NL = derLineNoLine(y)
-
     delta = []
 
+    errorV = yd[:]-y[-1][1:] # el ultimo vector de las lista y no tengo en cuenta el -1
     delta.append(errorV * derL_NL[-1][1:]) # el [1:] se utiliza para no tener en cuenta la salida de y = -1
     # la multiplicacion para dos vectores numpy de las misma dimension se hace elemento a elemento
-    wNew = []
-    wNew.append(w[-1] + vel * delta[-1] @ y[-2].T)
     
-    for i in range(0,len(w)-1):
+    wNew = []
+    wNew.append(w[-1] + vel * (delta[-1] @ y[-2].T))
+    wLen = len(w)
+    yLen = wLen + 2
+    
+    # el tamaño de y debe ser wLen + 2 porque y considera a la entrada como una salida y ademas tienen la salida de la
+    # ultima capa
+
+    for i in range(0,wLen-1):
         #print(derL_NL[-i-1].shape)
-        delta.insert(0,(w[-i+1][:,1:].T @ delta[0]) * derL_NL[-i-2][1:])
+        
+        delta.insert(0, (w[wLen - 1 - i][:,1:].T @ delta[0]) * derL_NL[yLen - 2 - i][1:])
+
         #print(delta[0].shape)
-        wNew.insert(0,w[-i] + vel * (delta[0] @ y[-i-3].T))
+        wNew.insert(0, w[wLen - 2 - i] + vel * (delta[0] @ y[yLen - 3 - i].T))
     return wNew
     
     

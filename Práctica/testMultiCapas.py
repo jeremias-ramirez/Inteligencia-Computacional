@@ -11,14 +11,13 @@ yd = np.expand_dims(reader[:, 2], axis=1)
 
 w = initW.initialize_w( np.ones((len(trn[0,:]),1)), np.array([2,1], np.int ))
 
-
 vel = 0.1
 epoc = 10
 
 accurV = np.zeros((epoc,1))
 wV = np.zeros((epoc,3))
-
 errorV = np.zeros((len(trn[:,1]),epoc))
+
 for i in range(epoc):
     for j in range(len(trn[:,0])):
         inputV = np.expand_dims(trn[j,:], axis=1)
@@ -27,14 +26,11 @@ for i in range(epoc):
     accur = 0
     for j in range(len(trn[:,0])):
         inputV = np.expand_dims(trn[j,:], axis=1)
-        y = salY.salidasy(inputV,w)
-        ys = 1 if y[-1][-1] >= 0 else -1
-        error=yd[j] - ys
-        accur = (accur + 1 if error == 0 else accur)
+        y = salY.salidasy(inputV, w)
+        ys = y[-1][-1]
+        print(ys)
+        accur = (accur + 1 if ys >0.7 else accur)
     accurV[i]=accur/len(trn[:,1])    
-
-for i in accurV:
-    print(i)
 
 print(np.mean(accurV))
 
