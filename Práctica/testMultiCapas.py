@@ -27,9 +27,9 @@ for i in range(epoc):
     for j in range(len(trn[:,0])):
         inputV = np.expand_dims(trn[j,:], axis=1)
         y = salY.salidasy(inputV, w)
-        ys = y[-1][-1]
-        print(ys)
-        accur = (accur + 1 if ys >0.7 else accur)
+        ye = yd[j]
+        accur = (accur + 1  if abs(ye - y[-1][-1]) < 0.3 else accur) 
+
     accurV[i]=accur/len(trn[:,1])    
 
 print(np.mean(accurV))
