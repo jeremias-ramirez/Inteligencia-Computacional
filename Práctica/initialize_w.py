@@ -39,4 +39,5 @@ def initialize_w(input_vector, multicapaV):
          matrix.append(matrix_aux)
          #np.array(matrix)
     return matrix
+
 #w = init.initialize_w(input_vector, multicapaV)

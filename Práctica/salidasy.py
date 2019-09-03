@@ -17,13 +17,16 @@ import initialize_w as init
 def salidasy(input_vector, w):
         
         y = []
+
+        y.append(input_vector) #el algoritmo toma la entrada como una salida, se incluye el -1 
+
         b = 0.5 #constante de sigmoide
-        niveles = np.size(w)
+        niveles = len(w)
         input_capa = input_vector
         
         for i in range(niveles):
             z = w[i] @ input_capa
-            y_aux = np.zeros(np.size(z),1)
+            y_aux = np.zeros((np.size(z),1))
             for j in range(np.size(z)): 
                 #y_aux[j] = 1 if z[j] >= 0 else -1
                 y_aux[j] = sigm.sigmoide(z[j],b)
