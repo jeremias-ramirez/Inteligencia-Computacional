@@ -34,6 +34,6 @@ def backpropagation(w,y,yd,vel):
     for i in range(len(w)-2,-1,-1):
         delta.insert(0,(w[i+1].T @ delta[0]) * derL_NL[i][1:])
         wNew.insert(0,w[i] + vel * (delta[0] @ y[i-1].T))
-    return w
+    return wNew
     
     
