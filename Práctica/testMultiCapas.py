@@ -11,14 +11,13 @@ yd = np.expand_dims(reader[:, 2], axis=1)
 # inicializo aleatoriamente los pesos W - vector de entradas y vector con la cantidad de neuronas
 w = initW.initialize_w( np.ones((len(trn[0,:]),1)), np.array([2,1], np.int ))
 
-
 vel = 0.1
 epoc = 10
 
 accurV = np.zeros((epoc,1))
 wV = np.zeros((epoc,3))
-
 errorV = np.zeros((len(trn[:,1]),epoc))
+
 for i in range(epoc):
     for j in range(len(trn[:,0])):
         inputV = np.expand_dims(trn[j,:], axis=1)
@@ -27,14 +26,11 @@ for i in range(epoc):
     accur = 0
     for j in range(len(trn[:,0])):
         inputV = np.expand_dims(trn[j,:], axis=1)
-        y = salY.salidasy(inputV,w)
-        ys = 1 if y[-1][-1] >= 0 else -1
-        error=yd[j] - ys
-        accur = (accur + 1 if error == 0 else accur)
-    accurV[i]=accur/len(trn[:,1])    
+        y = salY.salidasy(inputV, w)
+        ye = yd[j]
+        accur = (accur + 1  if abs(ye - y[-1][-1]) < 0.3 else accur) 
 
-for i in accurV:
-    print(i)
+    accurV[i]=accur/len(trn[:,1])    
 
 print(np.mean(accurV))
 
