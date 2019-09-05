@@ -17,7 +17,7 @@ epoc = 10
 accurV = np.zeros((epoc,1))
 wV = np.zeros((epoc,3))
 errorV = np.zeros((len(trn[:,1]),epoc))
-
+tasa = 1
 for i in range(epoc):
     for j in range(len(trn[:,0])):
         inputV = np.expand_dims(trn[j,:], axis=1)
@@ -28,11 +28,18 @@ for i in range(epoc):
         inputV = np.expand_dims(trn[j,:], axis=1)
         y = salY.salidasy(inputV, w)
         ye = yd[j]
+        ysalida = 1 if y[-1][-1] > 0 else -1
         accur = (accur + 1  if abs(ye - y[-1][-1]) < 0.3 else accur) 
-
+#        accur2 = (ye - y[-1][-1]) ** 2
+#    print(accur2)   
+    desempeño = accur/(np.size(trn[:,0]))
+#    print(desempeño)
+#    if desempeño >= tasa:
+#        break
     accurV[i]=accur/len(trn[:,1])    
 
 print(np.mean(accurV))
+
 
 #plt.scatter(trn[:,1],trn[:,2])
 #plt.plot(trn[:,1],-trn[:,1]*w[1]/w[2]+w[0]/w[2], 'g')
