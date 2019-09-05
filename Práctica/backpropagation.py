@@ -43,5 +43,33 @@ def backpropagation(w,y,yd,vel):
         wNew.insert(0, w[wLen - 2 - i] + vel * (delta @ y[yLen - 3 - i].T))
 
     return wNew
+def backpropagation_momento(w,y,yd,vel,velM,deltaW = None):
+    derL_NL = derLineNoLine(y)
+
+    errorV = yd[:]-y[-1][1:] # el ultimo vector de las lista y no tengo en cuenta el -1
+    delta = errorV * derL_NL[-1][1:] # el [1:] se utiliza para no tener en cuenta la salida de y = -1
+    # la multiplicacion para dos vectores numpy de las misma dimension se hace elemento a elemento
+   
+    if deltaW == None:
+        deltaW = [np.zeros_like(we) for we in w]
+    
+    deltaW[-1] = vel * (delta @ y[-2].T) + deltaW[-1]
+    wNew = []
+    wNew.append(w[-1] + velM * deltaW[-1])
+    
+    wLen = len(w)
+    yLen = wLen + 1
+    
+
+    # el tamaño de y debe ser wLen + 1 porque y considera a la entrada como una salida y ademas tienen la salida de la
+    # ultima capa
+    for i in range(0,wLen-1):
+
+        delta =  (w[wLen - 1 - i][:,1:].T @ delta) * derL_NL[yLen - 2 - i][1:]
+        deltaW[wLen - 2 - i] = vel * (delta @ y[yLen - 3 - i].T) + velM * deltaW[wLen - 2 - i] 
+
+        wNew.insert(0, w[wLen - 2 - i] + deltaW[wLen - 2 - i])
+
+    return wNew,deltaW
     
     
