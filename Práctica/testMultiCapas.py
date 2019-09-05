@@ -8,7 +8,7 @@ reader = np.genfromtxt("files/XOR_trn.csv", delimiter=',')
 trn = np.append(-np.ones((len(reader[:,1]),1)),reader[:, 0:2],1)
 yd = np.expand_dims(reader[:, 2], axis=1)
 
-
+# inicializo aleatoriamente los pesos W - vector de entradas y vector con la cantidad de neuronas
 w = initW.initialize_w( np.ones((len(trn[0,:]),1)), np.array([2,1], np.int ))
 
 

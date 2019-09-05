@@ -8,5 +8,5 @@ from math import e
 import numpy as np
 
 def sigmoide(vLineal, b):
-    y = 2/(((1 + e**(-(b*vLineal)))) + 1)
+    y = (2/ (1 + np.exp(-b*vLineal ))) - 1
     return y
