@@ -43,6 +43,7 @@ def backpropagation(w,y,yd,vel):
         wNew.insert(0, w[wLen - 2 - i] + vel * (delta @ y[yLen - 3 - i].T))
 
     return wNew
+
 def backpropagation_momento(w,y,yd,vel,velM,deltaW = None):
     derL_NL = derLineNoLine(y)
 
@@ -53,9 +54,9 @@ def backpropagation_momento(w,y,yd,vel,velM,deltaW = None):
     if deltaW == None:
         deltaW = [np.zeros_like(we) for we in w]
     
-    deltaW[-1] = vel * (delta @ y[-2].T) + deltaW[-1]
+    deltaW[-1] = vel * (delta @ y[-2].T) + velM * deltaW[-1]
     wNew = []
-    wNew.append(w[-1] + velM * deltaW[-1])
+    wNew.append(w[-1] +  deltaW[-1])
     
     wLen = len(w)
     yLen = wLen + 1

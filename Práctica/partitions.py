@@ -15,20 +15,28 @@ def getPartitions(data, porcenTrain):
      
     np.random.shuffle(indexs)
     
-    vPrueba = indexs[0:cantPrueba]
-    vTrain = indexs[cantPrueba::]
-
-    return vPrueba, vTrain
+    return getPartitions_leave_k_out(indexs,cantPrueba,0)
 
 def getPartitionsk_fold(data,indexs,porcenTrain,k):
     H, W = data.shape
     porcenPrueba = round(1 - porcenTrain, 2)
     cantPrueba = int(H * porcenPrueba)
-    vPrueba = indexs[k*cantPrueba:(k+1)*cantPrueba]
-     
-    c = [True if x not in vPrueba else False for x in indexs]
-    vTrain=indexs[c]
-    return vPrueba, vTrain
+    return getPartitions_leave_k_out(indexs,cantPrueba,k)
+
+
+# recibe los indexs con un orden, las cantidad de datos que se toman para la prueba k, y la particion que se pide o iteracion
+# en la particion 0 (iteracion 0) se toma los primeros k como prueba y los demas como entrenamiento
+# en la particion 1 (iteracion 1) se toma a partir de k hasta 2*k, y los anteriores y posteriores como entrenamiento, asi sucesivamente
+def getPartitions_leave_k_out(indexs,k,iteracion):
+
+    vPrueba = indexs[iteracion*k:(iteracion+1)*k]
+    vTrain = indexs[(iteracion-1) * k : iteracion*k] if iteracion > 0   else np.empty((0,), dtype = indexs.dtype)
+    vTrain = np.concatenate((vTrain,  indexs[(iteracion+1)*k::]))
+    return vPrueba,vTrain
+    
+
+
+#este metodo k es la cantidad de particiones, 
 
 def k_fold(data,k,epoc,vel,tasa):
     H, W = data.shape
@@ -67,7 +75,7 @@ def k_fold(data,k,epoc,vel,tasa):
     plt.show()
     
 
-data = np.genfromtxt("files/spheres1d10.csv", delimiter = ",")
-k_fold(data,20,20,0.01,0.8)
+#data = np.genfromtxt("files/spheres1d10.csv", delimiter = ",")
+#k_fold(data,20,20,0.01,0.8)
 
 

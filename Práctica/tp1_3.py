@@ -21,10 +21,10 @@ np.random.seed(19680801)
 w = initW.initialize_w( np.ones((len(trn[0,:]),1)), np.array([5,1], np.int ))
 w2 = w.copy()
 
-vel = 0.1
-velM = 0.5
+vel = 0.05
+velM = 0.3
 
-epoc = 10
+epoc = 150
 
 accurV = np.zeros((epoc,1))
 errorV = np.zeros((len(trn[:,1]),epoc))
@@ -63,7 +63,7 @@ for i in range(epoc):
 
         ye = yd[j]
         ysalida = 1 if y[-1][-1] > 0 else -1
-        ysalida2 = 1 if y[-1][-1] > 0 else -1
+        ysalida2 = 1 if y2[-1][-1] > 0 else -1
 
         accur = (accur + 1 if ysalida == ye else accur)
         accur2 = (accur2 + 1 if ysalida2 == ye else accur2)
@@ -84,7 +84,7 @@ for i in range(epoc):
 #        break
 
 print(np.mean(accurV))
-plt.plot(range(epoc), accurV, 'black', range(epoc),errorCV, 'g')
+plt.plot(range(epoc), accurV, 'k', range(epoc),errorCV, 'g')
 
 plt.plot(range(epoc), accurV2,'b', range(epoc),errorCV2, 'r')
 
