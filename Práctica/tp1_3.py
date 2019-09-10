@@ -39,7 +39,7 @@ wR = initW.initialize_w( np.ones((len(trnR[0,:]), 1)), np.array([1], np.int )) #
 vel = 0.05
 velM = 0.3
 
-epoc = 5
+epoc = 200
 
 
 accurV = np.zeros((epoc,1))
@@ -54,9 +54,7 @@ accurVR = np.zeros((epoc,1))
 errorVR = np.zeros((epoc,1))
 
 
-
 tasa = 0.8
-
 
 
 for i in range(epoc):
@@ -122,7 +120,7 @@ plt.plot(range(epoc), accurV, 'k', range(epoc), accurVM, 'g', range(epoc), accur
 
 plt.show()
 
-#
+
 #clase1= np.zeros((len(trn[:,0]),3))
 #clase2 = np.zeros((len(trn[:,0]),3))
 #for j in range(len(trn[:,0])):
