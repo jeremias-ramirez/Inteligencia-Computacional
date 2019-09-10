@@ -59,6 +59,7 @@ for i in range(epoc):
     for j in range(len(trn[:,0])):
         inputV = np.expand_dims(trn[j,:], axis=1)
         y = salY.salidasy(inputV, w)
+        print(y)
         y2 = salY.salidasy(inputV, w2)
 
         ye = yd[j]
