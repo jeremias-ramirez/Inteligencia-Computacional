@@ -59,7 +59,7 @@ for i in range(int(H/k)):
             print(y1) 
 
             w = bp.backpropagation(w, y1, yd[j, :].T, vel)
-    
+   
             accur = 0
             errorC = 0
             
@@ -73,7 +73,7 @@ for i in range(int(H/k)):
             ysalida3 = 1 if y[-1][-1] > 0 else -1
     
             accur = (accur + 1) if (ysalida1 == ye[0] and ysalida2 == ye[1] and ysalida3 == ye[2]) else accur
-    
+   
             errorC += (ye[0] - ysalida1 + ye[1] - ysalida2 + ye[2] - ysalida3) ** 2
         
         accurV[i] = accur/(np.size(trn[:,0]))
