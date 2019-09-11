@@ -16,7 +16,7 @@ def derLineNoLine(y):
 
 # w: es una lista con las matrices de los pesos, es decir w(0) = matriz de peso de la capa uno
 # y : es una lista con los vectores de  salida de las capas, el -1 de w0 debe estar incluido
-# yd : vector de salida deseada para calucar el error en la ultma capa, ademas las entradas se considera la primera salida
+# yd : vector de salida deseada para calcular el error en la ultima capa, ademas las entradas se considera la primera salida
 
 # vel : velocida de aprendizaje
 
@@ -24,8 +24,13 @@ def derLineNoLine(y):
     
 def backpropagation(w,y,yd,vel):
     derL_NL = derLineNoLine(y)
+    print(yd.shape)#(1,3)
+    print(y[-1][1:].shape)# 3,1
 
-    errorV = yd[:]-y[-1][1:] # el ultimo vector de las lista y no tengo en cuenta el -1
+    errorV = yd[:] - y[-1][1:] # el ultimo vector de las lista y no tengo en cuenta el -1
+    print("der y erro")
+    print(derL_NL[-1][1:].shape)
+    print(errorV.shape)
     delta = errorV * derL_NL[-1][1:] # el [1:] se utiliza para no tener en cuenta la salida de y = -1
     # la multiplicacion para dos vectores numpy de las misma dimension se hace elemento a elemento
     

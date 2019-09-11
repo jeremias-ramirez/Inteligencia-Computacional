@@ -86,6 +86,7 @@ for i in range(epoc):
         inputR = np.expand_dims(trnR[j,:], axis = 1)
 
         y = salY.salidasy(inputV, w)
+        print(y)
         y2 = salY.salidasy(inputV, w2)
         yR = salY.salidasy(inputR, wR)
 
