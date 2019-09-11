@@ -21,11 +21,11 @@ trn = np.append(-np.ones((len(data[:,1]),1)), data[:, 0:4],1)
 np.random.seed(19680801)
 # inicializo aleatoriamente los pesos W - vector de entradas y vector con la cantidad de neuronas
 
-w = initW.initialize_w( np.ones((5,1)), np.array([5,3], np.int ))
+w = initW.initialize_w( np.ones((5,1)), np.array([8,4,3], np.int ))
 
-vel = 0.05
+vel = 0.1
 
-epoc = 10
+epoc = 500
 
 accurV = np.zeros((epoc,1))
 errorV = np.zeros((len(trn[:,1]),epoc))
@@ -54,14 +54,14 @@ for i in range(int(H/k)):
             inputV = np.expand_dims(trn[j,:], axis = 1)
 #            inputV = np.expand_dims(trn[j,:], axis=1)
             y1 = salY.salidasy(inputV, w)
-            for ys in y1:
-                print(ys.shape)
-            print(y1) 
+#            for ys in y1:
+#                print(ys.shape)
+#            print(y1) 
 
             w = bp.backpropagation(w, y1, yd[j, :].T, vel)
    
-            accur = 0
-            errorC = 0
+        accur = 0
+        errorC = 0
             
         for j in range(len(trn[:,0])):
 #            inputV = np.expand_dims(trn[j,:], axis=1)
@@ -74,19 +74,19 @@ for i in range(int(H/k)):
     
             accur = (accur + 1) if (ysalida1 == ye[0] and ysalida2 == ye[1] and ysalida3 == ye[2]) else accur
    
-            errorC += (ye[0] - ysalida1 + ye[1] - ysalida2 + ye[2] - ysalida3) ** 2
+            errorC += np.linalg.norm(ye - y[-1][1:])
         
-        accurV[i] = accur/(np.size(trn[:,0]))
-        errorCV[i] = errorC/(np.size(trn[:,0]))
+        accurV[e] = accur/(np.size(trn[:,0]))
+        errorCV[e] = errorC/(np.size(trn[:,0]))
     
     
-        print("accur: {}, errorC: {}".format(accurV[i], errorCV[i]))
+        print("accur: {}, errorC: {}".format(accurV[e], errorCV[e]))
         #print(desempeño)
     #    if desempeño>tasa:
     #        break
 #
-#print(np.mean(accurV))
-#plt.plot(range(epoc), accurV, 'k', range(epoc),errorCV, 'g')
+print(np.mean(accurV))
+plt.plot(range(epoc), accurV, 'k', range(epoc),errorCV, 'g')
 #
 #plt.plot(range(epoc), accurV2,'b', range(epoc),errorCV2, 'r')
 #
