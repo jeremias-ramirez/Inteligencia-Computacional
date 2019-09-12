@@ -27,7 +27,7 @@ def backpropagation(w,y,yd,vel):
 #    print(yd.shape)#(1,3)
 #    print(y[-1][1:].shape)# 3,1
 
-    errorV = yd[:] - y[-1][1:] # el ultimo vector de las lista y no tengo en cuenta el -1
+    errorV = yd[:] - y[-1][1:]  # el ultimo vector de las lista y no tengo en cuenta el -1
 #    print("der y erro")
 #    print(derL_NL[-1][1:].shape)
 #    print(errorV.shape)

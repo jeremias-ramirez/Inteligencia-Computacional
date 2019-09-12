@@ -21,11 +21,11 @@ trn = np.append(-np.ones((len(data[:,1]),1)), data[:, 0:4],1)
 np.random.seed(19680801)
 # inicializo aleatoriamente los pesos W - vector de entradas y vector con la cantidad de neuronas
 
-w = initW.initialize_w( np.ones((5,1)), np.array([8,4,3], np.int ))
+w = initW.initialize_w( np.ones((5,1)), np.array([8,6,3], np.int ))
 
-vel = 0.1
+vel = 0.3
 
-epoc = 500
+epoc = 200
 
 accurV = np.zeros((epoc,1))
 errorV = np.zeros((len(trn[:,1]),epoc))
@@ -74,8 +74,8 @@ for i in range(int(H/k)):
     
             accur = (accur + 1) if (ysalida1 == ye[0] and ysalida2 == ye[1] and ysalida3 == ye[2]) else accur
    
-            errorC += np.linalg.norm(ye - y[-1][1:])
-        
+            errorC += np.linalg.norm(ye[:] - y[-1][1:], 2)
+#            errorC += sum((ye - y[-1][1:])**2)
         accurV[e] = accur/(np.size(trn[:,0]))
         errorCV[e] = errorC/(np.size(trn[:,0]))
     
