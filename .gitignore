@@ -1,3 +1,4 @@
 
 *.pyc
 *.pyc
+/Práctica/__pycache__
