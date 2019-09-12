@@ -27,7 +27,7 @@ w = initW.initialize_w( np.ones((5,1)), np.array([8,3], np.int ))
 vel = 0.1
 velM = 0.4
 
-epoc = 200
+epoc = 500
 
 tasa = 0.8
 
@@ -74,9 +74,9 @@ for i in range(int(H/k)):
             y = salY.salidasy(inputV, w)
         
             ye = yd[j, :].T
-            ysalida1 = 1 if y[-1][3] > 0 else -1
+            ysalida1 = 1 if y[-1][1] > 0 else -1
             ysalida2 = 1 if y[-1][2] > 0 else -1
-            ysalida3 = 1 if y[-1][1] > 0 else -1
+            ysalida3 = 1 if y[-1][3] > 0 else -1
     
             accur = (accur + 1) if (ysalida1 == ye[0] and ysalida2 == ye[1] and ysalida3 == ye[2]) else accur
    
