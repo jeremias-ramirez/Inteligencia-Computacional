@@ -2,3 +2,5 @@
 *.pyc
 *.pyc
 /Práctica/__pycache__
+Práctica/__pycache__/backpropagation.cpython-37.pyc
+Práctica/__pycache__/partitions.cpython-37.pyc
