@@ -22,11 +22,12 @@ yd = np.expand_dims(reader[:, 2], axis=1)
 ##################
 #caso tranformarlo a una dimension
 mediaTotal = np.mean(reader[:, 0:2], axis = 0)# obtenga la media por cada eje
+
 mediaTotal = mediaTotal.reshape((1,2)) # la transforma en una fila con dos columnas  
-trnR = np.linalg.norm((reader[:, 0:1] - mediaTotal), axis = 1) # a cada elemento le resto la media (fila x fila) y luego obengo la distacia euclidea
+trnR = np.linalg.norm((reader[:, 0:2] - mediaTotal), axis = 1) # a cada elemento le resto la media (fila x fila) y luego obengo la distacia euclidea
 
 #lo siguiente es agregar la entrada x0 = -1
-trnR = np.expand_dims(trnR, axis=1)
+trnR = np.expand_dims(trnR, axis = 1)
 trnR = np.append(-np.ones((len(trnR[:,0]), 1)), trnR[:,:], 1)
 
 
@@ -39,7 +40,7 @@ wR = initW.initialize_w( np.ones((len(trnR[0,:]), 1)), np.array([1], np.int )) #
 vel = 0.05
 velM = 0.3
 
-epoc = 200
+epoc = 50
 
 
 accurV = np.zeros((epoc,1))
@@ -76,7 +77,7 @@ for i in range(epoc):
     
     accurM = 0
     errorM = 0
-    
+  
     accurR = 0
     errorR = 0
 
@@ -84,9 +85,8 @@ for i in range(epoc):
 
         inputV = np.expand_dims(trn[j,:], axis = 1)
         inputR = np.expand_dims(trnR[j,:], axis = 1)
-
+    
         y = salY.salidasy(inputV, w)
-        print(y)
         y2 = salY.salidasy(inputV, w2)
         yR = salY.salidasy(inputR, wR)
 
@@ -113,25 +113,57 @@ for i in range(epoc):
     errorVR[i] = errorR/(np.size(trn[:,0]))
 
 
-plt.figure("error cuadratico medio")
+plt.figure("error cuadratico medio") 
 plt.plot(range(epoc), errorV, 'k', range(epoc), errorVM, 'g', range(epoc), errorVR, 'b')
 
 plt.figure("tasa de aciertos")
 plt.plot(range(epoc), accurV, 'k', range(epoc), accurVM, 'g', range(epoc), accurVR, 'b')
 
-plt.show()
-
-
-#clase1= np.zeros((len(trn[:,0]),3))
-#clase2 = np.zeros((len(trn[:,0]),3))
-#for j in range(len(trn[:,0])):
-#    inputV = np.expand_dims(trn[j,:], axis=1)
-#    y = salY.salidasy(inputV, w)
-#    if y[-1][-1] > 0:
-#        clase1[j] = trn[j,:]    
-#    else:
-#        clase2[j] = trn[j,:]    
-#
-#plt.scatter(clase1[:,1],clase1[:,2], c = "g")
-#plt.scatter(clase2[:,1],clase2[:,2], c = "r")
 #plt.show()
+#
+def showDistrib(data, w = None, trn = None):
+    clase1= np.zeros((len(data[:,0]),3))
+    clase2 = np.zeros((len(data[:,0]),3))
+    for j in range(len(data[:,0])):
+        inputV = np.expand_dims(data[j,:], axis = 1)
+        if not (w == None):
+            y = salY.salidasy(inputV, w)[-1][-1]
+            if y > 0:
+                clase1[j] = data[j,:]
+                plt.scatter(clase1[j,1],clase1[j,2], c = "g")
+            else:
+                clase2[j] = data[j,:]
+                plt.scatter(clase2[j,1],clase2[j,2], c = "r")
+
+        else :
+            y = data[j,-1]
+            if y > 0:
+                clase1[j] = data[j,:]
+                plt.scatter(clase1[j,0],clase1[j,1], c = "g")
+            else:
+                clase2[j] = data[j,:]
+                plt.scatter(clase2[j,0],clase2[j,1], c = "r")
+
+
+plt.subplot(221)
+showDistrib(reader)
+plt.scatter(mediaTotal[0,0], mediaTotal[0,1], c = "k", marker = ">")
+plt.subplot(222)
+showDistrib(trn,w)
+
+plt.subplot(223)
+showDistrib(trn,w2)
+
+plt.subplot(224)
+
+for j in range(len(trnR[:,0])):
+    inputV = np.expand_dims(trnR[j,:], axis = 1)
+    y = salY.salidasy(inputV, wR)[-1][-1]
+    if y > 0:
+        plt.scatter(trn[j,1], trn[j,2], c = "g")
+    else:
+        plt.scatter(trn[j,1], trn[j,2], c = "r")
+
+
+
+plt.show()
