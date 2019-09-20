@@ -40,7 +40,7 @@ wR = initW.initialize_w( np.ones((len(trnR[0,:]), 1)), np.array([1], np.int )) #
 vel = 0.05
 velM = 0.3
 
-epoc = 50
+epoc = 10
 
 
 accurV = np.zeros((epoc,1))
@@ -160,7 +160,7 @@ for j in range(len(trnR[:,0])):
     inputV = np.expand_dims(trnR[j,:], axis = 1)
     y = salY.salidasy(inputV, wR)[-1][-1]
     if y > 0:
-        plt.scatter(trn[j,1], trn[j,2], c = "g")
+         plt.scatter(trn[j,1], trn[j,2], c = "g")
     else:
         plt.scatter(trn[j,1], trn[j,2], c = "r")
 
