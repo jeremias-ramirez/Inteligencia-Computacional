@@ -34,7 +34,7 @@ tasa = 0.8
 accurV = np.zeros((epoc,1))
 errorCV = np.zeros((epoc,1))
 
-k = 10
+k = 1
 
 H, W = data.shape
 
@@ -92,6 +92,8 @@ for i in range(int(H/k)):
     errorVPar[i] = np.mean(errorCV)
 
 plt.plot(range(cantPart), accurVPar, 'k')
+plt.plot(range(cantPart), errorVPar, 'k')
+
 plt.show()
     
         #print("accur: {}, errorC: {}".format(accurV[e], errorCV[e]))
@@ -99,8 +101,8 @@ plt.show()
     #    if desempeño>tasa:
     #        break
 #
-print(np.mean(accurV))
-plt.plot(range(epoc), accurV, 'k', range(epoc),errorCV, 'g')
+#print(np.mean(accurV))
+#plt.plot(range(epoc), accurV, 'k', range(epoc),errorCV, 'g')
 #
 #plt.plot(range(epoc), accurV2,'b', range(epoc),errorCV2, 'r')
 #
