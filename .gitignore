@@ -1,6 +1,6 @@
 
 *.pyc
 *.pyc
-/Práctica/__pycache__/*.py 
+/Práctica/__pycache__/ 
 /Práctica/*.vimrc
 
