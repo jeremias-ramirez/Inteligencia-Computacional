@@ -8,6 +8,7 @@ Created on Thu Sep  5 14:06:46 2019
 import numpy as np
 import initialize_w as initW
 import salidasy as salY
+import trainning as trnD
 import backpropagation as bp
 from matplotlib import pyplot as plt
 
@@ -40,7 +41,7 @@ wR = initW.initialize_w( np.ones((len(trnR[0,:]), 1)), np.array([1], np.int )) #
 vel = 0.05
 velM = 0.3
 
-epoc = 10
+epoc = 350
 
 
 accurV = np.zeros((epoc,1))
@@ -59,18 +60,23 @@ tasa = 0.8
 
 
 for i in range(epoc):
-    deltaW = None
-    for j in range(len(trn[:,0])):
-        inputV = np.expand_dims(trn[j,:], axis = 1)
-        inputVR = np.expand_dims(trnR[j,:], axis = 1)
+    w = trnD.trainningW(trn, yd, w, vel)
+    w2 = trnD.trainningW(trn, yd, w2, vel, velM)
+    wR = trnD.trainningW(trnR, yd, wR, vel)
+    
+    #deltaW = None
+    #
+    #for j in range(len(trn[:,0])):
+    #    inputV = np.expand_dims(trn[j,:], axis = 1)
+    #    inputVR = np.expand_dims(trnR[j,:], axis = 1)
 
-        y1 = salY.salidasy(inputV,w)
-        y2 = salY.salidasy(inputV,w2)
-        yR = salY.salidasy(inputVR,wR)
+    #    y1 = salY.salidasy(inputV,w)
+    #    y2 = salY.salidasy(inputV,w2)
+    #    yR = salY.salidasy(inputVR,wR)
 
-        w = bp.backpropagation(w,y1,yd[j],vel)
-        w2,deltaW = bp.backpropagation_momento(w2,y2,yd[j],vel,velM,deltaW)
-        wR = bp.backpropagation(wR,yR,yd[j],vel)
+    #    w = bp.backpropagation(w,y1,yd[j],vel)
+    #    w2,deltaW = bp.backpropagation_momento(w2,y2,yd[j],vel,velM,deltaW)
+    #    wR = bp.backpropagation(wR,yR,yd[j],vel)
 
     accur = 0
     error = 0
