@@ -8,10 +8,6 @@ import numpy as np
 import salidasy as salY
 import backpropagation as bp
 
-#w = trnD.trainningW(trn, yd, w, vel)
-#    w2 = trnD.trainningW(trn, yd, w2, vel, velM)
-#    wR = trnD.trainningW(trnR, yd, wR, vel)
-#
 def trainningW(trn, yd, w, vel, velM = 0.0):
     deltaW = None
     for j in range(len(trn[:,0])):

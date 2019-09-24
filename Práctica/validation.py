@@ -4,16 +4,26 @@ Created on Thu Aug 22 16:22:40 2019
 
 """
 import numpy as np
+import salidasy as salY
 
-def validation(data, w):
-    H, W = data.shape
-    trn = np.append(-np.ones((len(data[:,1]),1)),data[:, 0:W-1],1)
-    yd = data[:, W-1]
+def validation(val, yd, w):
     accur = 0
+    errC = 0
     
-    for j in range(len(trn[:,0])):
-        z = sum(trn[j,:] * w[:])
-        y = 1 if z >= 0 else -1
-        error=yd[j] - y
-        accur = (accur + 1 if error == 0 else accur)
-    return accur/len(trn[:,0])
+    for j in range(len(val[:,0])):
+
+        inputV = np.expand_dims(val[j,:], axis = 1)
+    
+        y = salY.salidasy(inputV, w)
+
+        ye = yd[j].T
+        fSigno = lambda x: 1 if x >= 0 else -1
+        ysalida = np.array(list( map( fSigno, y[-1][1:])))
+
+        accur = (accur + 1 if all(ysalida == ye) else accur)
+        errC = np.linalg.norm(ye - y[-1][1:])**2
+    
+    N = np.size(val[:,0])
+
+    return accur/N, errC/N
+
