@@ -21,7 +21,7 @@ def validation(val, yd, w):
         ysalida = np.array(list( map( fSigno, y[-1][1:])))
 
         accur = (accur + 1 if all(ysalida == ye) else accur)
-        errC = np.linalg.norm(ye - y[-1][1:])**2
+        errC += np.linalg.norm(ye - y[-1][1:])**2
     
     N = np.size(val[:,0])
 

@@ -71,14 +71,14 @@ for i in range(epoc):
     accurM, errorM = valD.validation(trn, yd, w2)
     accurR, errorR = valD.validation(trnR, yd, wR) 
 
-    accurV[i] = accur/(np.size(trn[:,0]))
-    errorV[i] = error/(np.size(trn[:,0]))
+    accurV[i] = accur
+    errorV[i] = error
 
-    accurVM[i] = accurM/(np.size(trn[:,0]))
-    errorVM[i] = errorM/(np.size(trn[:,0]))
+    accurVM[i] = accurM
+    errorVM[i] = errorM
     
-    accurVR[i] = accurR/(np.size(trn[:,0]))
-    errorVR[i] = errorR/(np.size(trn[:,0]))
+    accurVR[i] = accurR
+    errorVR[i] = errorR
 
 
 plt.figure("error cuadratico medio") 
@@ -87,8 +87,7 @@ plt.plot(range(epoc), errorV, 'k', range(epoc), errorVM, 'g', range(epoc), error
 plt.figure("tasa de aciertos")
 plt.plot(range(epoc), accurV, 'k', range(epoc), accurVM, 'g', range(epoc), accurVR, 'b')
 
-#plt.show()
-#
+
 def showDistrib(data, w = None, trn = None):
     clase1= np.zeros((len(data[:,0]),3))
     clase2 = np.zeros((len(data[:,0]),3))
