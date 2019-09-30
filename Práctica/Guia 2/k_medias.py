@@ -13,6 +13,12 @@ def distCent(data, indexs, gruposCent, centroides, k):
 #k: cantidad de cluster
 #tol: tolerancia de corte para el promedio de distancias entre los centroides y sus datos asociados
 
+# el algoritmo corta por una tolerancia
+# a partir de unos centroides elegidos aleatoriamente itera para armar los cluster(grupos)
+# luego si finaliza porque los ya no hay cambio en los grupos, o el fin de iteraciones 
+# calula la distancia promedio, para verificar si finalizar con esos grupos, y centroides o
+# elegir nuevamente otro centroides aleatorios, y luego hacer la iteracion nuevamente
+
 def k_media_batch(data, indexs, k, tol=0.1):
     
     H, W = data.shape
@@ -23,11 +29,8 @@ def k_media_batch(data, indexs, k, tol=0.1):
     distancias = np.zeros((H,k)) 
     iterMax = 200
     distancia = tol+1
-    # el algoritmo corta por una tolerancia
-    # a partir de unos centroides elegidos aleatoriamente itera para armar los cluster(grupos)
-    # luego si finaliza porque los ya no hay cambio en los grupos, o el fin de iteraciones 
-    # calula la distancia promedio, para verificar si finalizar con esos grupos, y centroides o
-    # elegir nuevamente otro centroides aleatorios, y luego hacer la iteracion nuevamente
+    flagCentVacio = False
+
     while distancia > tol:
 
         centroides = getCentroides()
@@ -39,16 +42,19 @@ def k_media_batch(data, indexs, k, tol=0.1):
 
             gruposCentroidesNew = np.argmin(distancias, axis = 1)
             
+            # si hay algun centroide el cual no tiene asociado ningun dato, busca otros centroides aleatorios 
+            flagCentVacio = any(list([indexs[gruposCentroidesNew == i].shape[0] == 0 for i in range(k)]))
+            if flagCentVacio:
+                break
             if (gruposCentroidesNew == gruposCentroides).all():
                 break
 
             gruposCentroides = gruposCentroidesNew
             centroides = [ np.mean( data[ indexs[ gruposCentroides == indexCent], :], axis = 0) for indexCent in range(k)]
         
-        # si hay algun centroide el cual no tiene asociado ningun dato, busca otros centroides aleatorios 
-        if  any(list([indexs[gruposCentroidesNew == i].shape[0] == 0 for i in range(k)])):
+        if  flagCentVacio:
             continue
-        
+            
         distancia = distCent(data, indexs, gruposCentroides, centroides, k)
 
     return  gruposCentroides 
