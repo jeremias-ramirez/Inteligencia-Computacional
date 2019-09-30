@@ -1,97 +1,55 @@
 import numpy as np
+import math
+#distancia promedio, entre las distancias promedios de los centroides con sus datos asociados
 
-def getCentroidesGrupos(data, grupos):
-    #print(data[grupos[0],:])
-    _, W = data.shape
-    getMean = lambda grupo : np.mean( data[grupo , : ], axis = 0)
-    centroides = list( map( getMean, grupos ) )
-    #print(centroides) 
-    #input()
-    return centroides
+def distCent(data, indexs, gruposCent, centroides, k):
+    tamGrupoCent = lambda i : indexs[ gruposCent == i].shape[0]
+    sumCentroide = lambda i : np.sum (np.linalg.norm( (data[ indexs[ gruposCent == i], :] - centroides[i]), axis = 1, ord = 2)) / tamGrupoCent(i)
 
-def reasigacionGrupos(data, centroides, k):
-    grupos = [list() for i in range(k)]
+    return sum([sumCentroide(indexCent) for indexCent in range(k)]) / k
 
-    for i in range( len(data[:,0]) ):
-        #print(i) 
-        #print(data[i, :].shape)
-        #print( "cnea")
-        #print(list(map(lambda cn: cn.shape, centroides)))
-        #input()
-        distancias = np.linalg.norm((data[i, :] - centroides), axis = 1)**2
-        #print(distancias) 
-        index = np.argmin(distancias, axis = 0)
-        #print(index)
+#data = datos
+#index: vector numpy con la indeces mezclados
+#k: cantidad de cluster
+#tol: tolerancia de corte para el promedio de distancias entre los centroides y sus datos asociados
 
-        #input()
-        grupos[index].append(i)
+def k_media_batch(data, indexs, k, tol=0.1):
     
-    return grupos 
-
-def indexArgMin(xl, centroides):
-    distancias = np.linalg.norm((xl - centroides), axis = 1)**2
-    return np.argmin(distancias, axis = 0)
-
-def cmpGrupos(grupos1, grupos2):
-    flag = True
-    for i, grupo1 in enumerate(grupos1):
-        if grupo1 != grupos2[i]:
-            flag = False
-            break
-    return flag
-
-def updateGroups(data, grupos, k):
-    flag = True 
-    iterMax = 1000
-    for i in range(iterMax):
-        centroides = getCentroidesGrupos(data, grupos) 
-        #print("gropo ol")
-        #print(grupos)
-        gruposN = reasigacionGrupos(data, centroides, k)
-        #print("grupo n")
-        #print(gruposN)
-        #input()
-        cmpGroups = [ grupos[i] != gruposN[i] for i in range(k)]
-        flag = any(cmpGroups);
-        if not flag:
-            break
-        grupos.clear()
-        grupos = gruposN.copy()
-        gruposN.clear()
-    return grupos 
+    H, W = data.shape
+    #funcion para elegir centroides al azar
+    getCentroides = lambda : [ data[np.random.randint(0,H), :] for i in range(k)]
     
+    gruposCentroides = np.zeros((H))
+    distancias = np.zeros((H,k)) 
+    iterMax = 200
+    distancia = tol+1
+    # el algoritmo corta por una tolerancia
+    # a partir de unos centroides elegidos aleatoriamente itera para armar los cluster(grupos)
+    # luego si finaliza porque los ya no hay cambio en los grupos, o el fin de iteraciones 
+    # calula la distancia promedio, para verificar si finalizar con esos grupos, y centroides o
+    # elegir nuevamente otro centroides aleatorios, y luego hacer la iteracion nuevamente
+    while distancia > tol:
 
-def k_media_batch(data, k):
-    
-    H, _ = data.shape
-    tamG = int(H/k) # tamaño del grup
-    indexs = np.arange(0, H, 1)
-    np.random.shuffle(indexs)
-    
-    centroides = [ data[indexs[i]] for i in range(k) ]
+        centroides = getCentroides()
+        
+        for n in range(iterMax):
+            
+            for i, centroide in enumerate(centroides):
+                distancias[:, i] = np.linalg.norm (data[indexs[:],:] - centroide, ord = 2, axis = 1)
 
-    gruposI = reasigacionGrupos(data, centroides, k)
+            gruposCentroidesNew = np.argmin(distancias, axis = 1)
+            
+            if (gruposCentroidesNew == gruposCentroides).all():
+                break
 
-    return updateGroups(data, gruposI, k) 
+            gruposCentroides = gruposCentroidesNew
+            centroides = [ np.mean( data[ indexs[ gruposCentroides == indexCent], :], axis = 0) for indexCent in range(k)]
+        
+        # si hay algun centroide el cual no tiene asociado ningun dato, busca otros centroides aleatorios 
+        if  any(list([indexs[gruposCentroidesNew == i].shape[0] == 0 for i in range(k)])):
+            continue
+        
+        distancia = distCent(data, indexs, gruposCentroides, centroides, k)
 
+    return  gruposCentroides 
 
-#def gradienteJ(data, centroides)
-#
-#def k_medias_online(data, k):
-#    H, _ = data.shape
-#    tamG = int(H/k) # tamaño del grup
-#    indexs = np.arange(0, H, 1)
-#    np.random.shuffle(indexs)
-#    centroides = [ data[indexs[i]] for i in range(k) ]
-#    vel = 0.1
-#    distMin = 0.001
-#    dist = 1.0
-#    while distMin < dist :
-#        for i in range(len (H) ):
-#            index = indexArgMin(data[i, :], centroides)
-#            centroides[index] = centroides[index] + vel * (data[i, :] - centroides[index])
-#            dist = gradienteJ(data, centroides)
-#            
-#            if distMin < distMin:
-#                break
-#
