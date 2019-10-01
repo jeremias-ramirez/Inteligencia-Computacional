@@ -88,12 +88,10 @@ def k_medias_tol(data, indexs, k, tol = 0.1, iterMaxTol = 200, iterMaxConv = 200
 
 def gauss_k_medias(data, centroides, k):
     
-    
     H = data.shape[0]
     transfGauss = np.zeros((H,k))
     for i, centroide in enumerate(centroides):
         transfGauss[:, i] = np.exp(-0.5 * np.linalg.norm((data[:, :] - centroide), axis = 1) ** 2 )
-
 
     return transfGauss 
 

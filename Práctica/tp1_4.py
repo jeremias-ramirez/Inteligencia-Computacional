@@ -36,7 +36,6 @@ accurV = np.zeros((epoc,1))
 errorCV = np.zeros((epoc,1))
 
 k = 5
-
 H, W = data.shape
 
 cantPart = int(H/k)

@@ -10,20 +10,21 @@ def validation(val, yd, w):
     accur = 0
     errC = 0
     
-    for j in range(len(val[:,0])):
+    fSigno = lambda x: 1 if x >= 0 else -1
+    
+    for j in range(val.shape[0]):
 
         inputV = np.expand_dims(val[j,:], axis = 1)
     
         y = salY.salidasy(inputV, w)
 
         ye = yd[j].T
-        fSigno = lambda x: 1 if x >= 0 else -1
-        ysalida = np.array(list( map( fSigno, y[-1][1:])))
-
+        
+        ysalida = np.expand_dims(np.array(list( map( fSigno, y[-1][1:]))), axis = 1)
         accur = (accur + 1 if all(ysalida == ye) else accur)
         errC += np.linalg.norm(ye - y[-1][1:])**2
     
-    N = np.size(val[:,0])
+    N = (val[:,0]).shape[0]
 
     return accur/N, errC/N
 

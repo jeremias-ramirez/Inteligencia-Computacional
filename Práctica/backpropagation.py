@@ -51,8 +51,8 @@ def backpropagation(w,y,yd,vel):
 
 def backpropagation_momento(w,y,yd,vel,velM,deltaW = None):
     derL_NL = derLineNoLine(y)
-
-    errorV = yd[:]-y[-1][1:] # el ultimo vector de las lista y no tengo en cuenta el -1
+    
+    errorV = yd[:].T - y[-1][1:] # el ultimo vector de las lista y no tengo en cuenta el -1
     delta = errorV * derL_NL[-1][1:] # el [1:] se utiliza para no tener en cuenta la salida de y = -1
     # la multiplicacion para dos vectores numpy de las misma dimension se hace elemento a elemento
    

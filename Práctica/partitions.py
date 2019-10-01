@@ -32,7 +32,7 @@ def getPartitions_leave_k_out(indexs,k,iteracion):
     vPrueba = indexs[iteracion*k:(iteracion+1)*k]
     vTrain = indexs[0: iteracion*k] if iteracion > 0   else np.empty((0,), dtype = indexs.dtype)
     vTrain = np.concatenate((vTrain,  indexs[(iteracion+1)*k::]))
-    return vPrueba,vTrain
+    return vPrueba, vTrain
     
 
 

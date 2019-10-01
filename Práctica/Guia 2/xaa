@@ -1,0 +1,83 @@
+import numpy as np
+import initialize_w as initW
+import salidasy as salY
+import trainning as trnD
+import validation as valD
+
+import backpropagation as bp
+from matplotlib import pyplot as plt
+
+# poner fijo la semilla para que todos los pesos de distintas red tengan los mismo valores
+np.random.seed(19680801)
+
+
+reader = np.genfromtxt("files/concentlite.csv", delimiter=',')
+trn = np.append(-np.ones((len(reader[:,1]),1)),reader[:, 0:2],1)
+yd = np.expand_dims(reader[:, 2], axis=1)
+
+##################
+#caso tranformarlo a una dimension
+mediaTotal = np.mean(reader[:, 0:2], axis = 0)# obtenga la media por cada eje
+
+mediaTotal = mediaTotal.reshape((1,2)) # la transforma en una fila con dos columnas  
+trnR = np.linalg.norm((reader[:, 0:2] - mediaTotal), axis = 1) # a cada elemento le resto la media (fila x fila) y luego obengo la distacia euclidea
+
+#lo siguiente es agregar la entrada x0 = -1
+trnR = np.expand_dims(trnR, axis = 1)
+trnR = np.append(-np.ones((len(trnR[:,0]), 1)), trnR[:,:], 1)
+
+
+# inicializo aleatoriamente los pesos W - vector de entradas y vector con la cantidad de neuronas
+w = initW.initialize_w( np.ones((len(trn[0,:]),1)), np.array([5,1], np.int ))
+w2 = w.copy()
+
+wR = initW.initialize_w( np.ones((len(trnR[0,:]), 1)), np.array([1], np.int )) #inicializar los pesos de un perctron simple una capa con una neurana ([1])
+
+vel = 0.05
+velM = 0.3
+
+epoc = 300
+
+
+accurV = np.zeros((epoc,1))
+errorV = np.zeros((epoc,1))
+
+#con momento
+accurVM = np.zeros((epoc,1))
+errorVM = np.zeros((epoc,1))
+
+#radial
+accurVR = np.zeros((epoc,1))
+errorVR = np.zeros((epoc,1))
+
+
+tasa = 0.8
+
+
+for i in range(epoc):
+    w = trnD.trainningW(trn, yd, w, vel)
+    w2 = trnD.trainningW(trn, yd, w2, vel, velM)
+    wR = trnD.trainningW(trnR, yd, wR, vel)
+    
+    
+    accur, error = valD.validation(trn, yd, w)
+    accurM, errorM = valD.validation(trn, yd, w2)
+    accurR, errorR = valD.validation(trnR, yd, wR) 
+
+    accurV[i] = accur
+    errorV[i] = error
+
+    accurVM[i] = accurM
+    errorVM[i] = errorM
+    
+    accurVR[i] = accurR
+    errorVR[i] = errorR
+
+
+plt.figure("error cuadratico medio") 
+plt.plot(range(epoc), errorV, 'k', range(epoc), errorVM, 'g', range(epoc), errorVR, 'b')
+
+plt.figure("tasa de aciertos")
+plt.plot(range(epoc), accurV, 'k', range(epoc), accurVM, 'g', range(epoc), accurVR, 'b')
+
+

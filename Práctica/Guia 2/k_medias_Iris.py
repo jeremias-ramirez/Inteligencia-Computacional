@@ -3,7 +3,6 @@ import k_medias as km
 import multiprocessing as mp
 from matplotlib import pyplot as plt
 
-np.random.seed(124394140)
 
 reader = np.genfromtxt("files/irisbin.csv", delimiter=',')
 
@@ -17,7 +16,7 @@ indexs = np.arange(0, H, 1)
 np.random.shuffle(indexs)
 
 minK = 4
-maxK = 30
+maxK = 27
 
 distPromV = np.ones((maxK-minK,1))
 
@@ -28,15 +27,18 @@ results = [pool.apply(km.k_medias_tol, (data,indexs, k, 0.05, 200, 200, )) for k
 for k in range(minK, maxK):
     distPromV[k-minK] = results[k-minK][1]
 
-plt.plot(np.arange(minK, maxK), distPromV)
-plt.scatter(np.arange(minK, maxK), distPromV)
 
-plt.xticks(np.arange(minK, maxK))
+fig = plt.figure()
+
+ax = fig.add_subplot(111)
+
+ax.plot(np.arange(minK, maxK), distPromV)
+ax.scatter(np.arange(minK, maxK), distPromV)
+
+ax.set_title("Curva k_medias Iris")
+ax.set_xticks(np.arange(minK, maxK))
+ax.set_xlabel(" K ")
+ax.set_ylabel("Distancia Promedio de Centroides")
+
 plt.show()
-
-#transfGauss = km.gauss_k_medias(data, centroides, k)
-#outputGauss = np.append(transfGauss, y, axis = 1)
-#
-#np.savetxt("files/iris_k_medias_" + str(k) + ".csv", outputGauss, delimiter = ",")
-
 
