@@ -44,7 +44,7 @@ def som(data, hn, wn):
     vel = 0.01
     
     w_activ = np.zeros((H,1))
-    epoc = 1
+    epoc = 100
     
     for i in range(hn):
         for j in range(wn):
@@ -52,7 +52,14 @@ def som(data, hn, wn):
              w[i,j,:] = data[np.random.randint(0, H)]
 #    print(w)
 #    print(w.reshape((hn*wn, W))
-    for ep in range(epoc):         
+    for ep in range(epoc):
+        if ep < 15:
+            ra_vecindad = 1 #muy poquitas neuronas con XOR sino deberia ser 2
+        elif ep < 50:
+            ra_vecindad = 1
+        else:
+            ra_vecindad = 0
+#        print("epoca {} ra {}".format(ep,ra_vecindad))
         for i in range(H):
     #        print(data[i,:])
             distancias = np.linalg.norm((data[i, :] - w.reshape((hn*wn, W) )), axis = 1,ord=2)
@@ -62,7 +69,8 @@ def som(data, hn, wn):
 #            print(ind)
             columna = ind%wn
             fila = int(ind/wn)
-            w_activ[i]= int(ind)
+            if ra_vecindad == 0:
+                w_activ[i]= int(ind)
             # actual
     #        print("fila, columna {} {}".format(fila, columna))
             w[fila,columna] = w[fila,columna] + vel * (data[i,:]-w[fila,columna])
@@ -112,7 +120,7 @@ def som(data, hn, wn):
 
     return w_activ
         
-np.random.seed(190000)
+#np.random.seed(190000)
 reader = np.genfromtxt("files/XOR_trn.csv", delimiter=',')
 data =  reader[:, 0:2] 
 w_activ = som(data, 2, 2)    
