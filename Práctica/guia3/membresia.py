@@ -29,19 +29,6 @@ def matrizMembresia1E(x, M, tipo):
     return matrizMembresia(np.array([x]),M, tipo)
 
 
-
-def defuzzificacion(gA, M, tipo):
-        y = 0.0
-        areaV = np.zeros((gA.shape[0]))
-        area = None 
-        if tipo == 1:
-            area = lambda vConj : 0.5 * abs(vConj[3] - vConj[0]) + abs(vConj[2] - vConj[1])
-        else:
-            area = lambda vConj : vConj[1] * np.power(2 * np.pi, 0.5)
-
-        areaV = np.expand_dims(np.array(list(map(area, M))), axis = 1)
-        return (gA.T @ areaV)[0,0] / areaV.sum()
-
 def areaCentr_Trapezoide(h, vConj):
     if h == 0:
        return (0,0) 
@@ -66,7 +53,7 @@ def areaCentr_Gauss(h, vConj):
     area = vConj[1] * np.sqrt(2 * np.pi)    
     return vConj[0], area
  
-def defuzzificacion2(gA, M, tipo):
+def defuzzificacion(gA, M, tipo):
     area = np.zeros((M.shape[0], 1))
     areaCentr = np.zeros((M.shape[0], 1))
 

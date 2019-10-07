@@ -3,7 +3,6 @@ import math
 #distancia promedio, entre las distancias promedios de los centroides con sus datos asociados
 
 def distCent(data, indexs, gruposCent, centroides, k):
-    tamGrupoCent = lambda i : indexs[ gruposCent == i].shape[0]
     sumCentroide = lambda i : np.mean( np.linalg.norm( ( data[ indexs[ gruposCent == i], :] - centroides[i]), axis = 1, ord = 2)) 
     return np.mean([sumCentroide(indexCent) for indexCent in range(k)]) 
 
@@ -35,7 +34,6 @@ def k_medias_batch(data, indexs, k, centroides, iterMax = 200):
     distancias = np.zeros((H,k)) 
         
     for n in range(iterMax): # buscar la convergencia con los centroides dados como parametros 
-        
         for i, centroide in enumerate(centroides):
             distancias[:, i] = np.linalg.norm (data[indexs[:],:] - centroide, ord = 2, axis = 1)
 
@@ -56,19 +54,19 @@ def k_medias_batch(data, indexs, k, centroides, iterMax = 200):
 
 def k_medias_tol(data, indexs, k, tol = 0.1, iterMaxTol = 200, iterMaxConv = 200):
     
-    H, W = data.shape
+    H = data.shape[0]
     
     #funcion para elegir centroides aleatoriamente
     getCentroides = lambda : [ data[np.random.randint(0,H), :] for i in range(k)]
     
     centroidesMin = list() 
     gruposCentroidesMin = np.zeros((H))
-    distanciaMin = tol + 1
-
+    distanciaMin = math.inf
+    
     for j in range(iterMaxTol):  # si no corta por la tolerancia, entoces lo hace por fin de iteracion
         
         centroides, gruposCentroides, flagCentVacio = k_medias_batch(data, indexs, k, getCentroides())
-
+        
         if  flagCentVacio: # no dejar que exista ningun centroide vacio
             continue
             
