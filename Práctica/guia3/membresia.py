@@ -26,7 +26,7 @@ def matrizMembresia(xV, M, tipo):
 
     return y
 def matrizMembresia1E(x, M, tipo):
-    return matrizMembresia(np.array([x]),M, tipo)
+    return matrizMembresia(np.array([x]), M, tipo)
 
 
 def areaCentr_Trapezoide(h, vConj):
