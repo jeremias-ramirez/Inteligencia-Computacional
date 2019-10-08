@@ -65,5 +65,11 @@ def defuzzificacion(gA, M, tipo):
     return (areaCentr[:,1].T @ areaCentr[:,0]) / areaCentr[:,0].sum()
 
 
+def sistemaBorroso(x, r, M, S, tipo):
+    gA = matrizMembresia1E(x, M, tipo)
+    gAN = np.zeros((r.shape[0], 1))
+    gAN[r-1] = gA
+    return defuzzificacion(gA, S, tipo)
 
-    
+def sistemaBorrosoMap(x, r, M, S, tipo):
+    return np.array(list(map(lambda xe: sistemaBorroso(xe, r, M, S, tipo), x)))
