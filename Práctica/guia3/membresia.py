@@ -17,7 +17,6 @@ def membresia(x, vConj, tipo):
         u = np.exp(-0.5 * ((x - vConj[0]) / vConj[1]) ** 2) 
     return u
 
-##tp 2
 def matrizMembresia(xV, M, tipo):
     y = np.zeros((M.shape[0], xV.shape[0])) 
     y = np.array( list( map( lambda me: list(map(lambda xe: membresia(xe, me, tipo), xV)), M)) )
@@ -65,7 +64,7 @@ def sistemaBorroso(x, r, M, S, tipo):
     gA = matrizMembresia1E(x, M, tipo)
     gAN = np.zeros((r.shape[0], 1))
     gAN[r-1] = gA
-    return defuzzificacion(gA, S, tipo)
+    return defuzzificacion(gAN, S, tipo)
 
 def sistemaBorrosoMap(x, r, M, S, tipo):
     return np.array( list( map( lambda xe: sistemaBorroso(xe, r, M, S, tipo), x)))
