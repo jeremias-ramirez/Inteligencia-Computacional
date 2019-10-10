@@ -12,7 +12,6 @@ def membresia(x, vConj, tipo):
         elif vConj[2] < x and x <= vConj[3]:
             u = 1 - (x - vConj[2]) / (vConj[3] - vConj[2])
 
-
     elif tipo == 2:
         u = np.exp(-0.5 * ((x - vConj[0]) / vConj[1]) ** 2) 
     return u
@@ -23,7 +22,7 @@ def matrizMembresia(xV, M, tipo):
     return y
 
 def matrizMembresia1E(x, M, tipo):
-    return matrizMembresia(np.array([x]), M, tipo)
+    return matrizMembresia(np.array([x]), M, tipo).reshape((M.shape[0]))
 
 
 def areaCentr_Trapezoide(h, vConj):
@@ -31,7 +30,6 @@ def areaCentr_Trapezoide(h, vConj):
        return (0,0) 
     area = np.zeros((3,1))
     centr = np.zeros((3,1))
-
     if vConj[0] != vConj[1]:
         area[0] = abs(vConj[1] - vConj[0]) * h / 2
         centr[0] = vConj[0] + 2/3 * abs(vConj[1] - vConj[0])
@@ -42,7 +40,7 @@ def areaCentr_Trapezoide(h, vConj):
         area[2]  = (vConj[3] - vConj[2]) * h / 2
         centr[2] = vConj[2] + 1/3 * abs(vConj[3] - vConj[2])
     
-    return area.sum(), ((centr.T @ area)[0][0] / area.sum())
+    return h * area.sum(), ((centr.T @ area)[0][0] / h * area.sum())
 
 def areaCentr_Gauss(h, vConj):
     if h == 0.0:
@@ -51,18 +49,19 @@ def areaCentr_Gauss(h, vConj):
     return area, vConj[0] 
  
 def defuzzificacion(gA, M, tipo):
-    area = np.zeros((M.shape[0], 1))
-    areaCentr = np.zeros((M.shape[0], 1))
+    areaCentr = list() 
     if tipo == 1:
-        areaCentr = np.array([areaCentr_Trapezoide(gA[i], conj) for i, conj in enumerate(M)])
+        areaCentr = [areaCentr_Trapezoide(gA[i], conj) for i, conj in enumerate(M)]
     else:
         areaCentr = np.array([areaCentr_Gauss(gA[i], conj) for i, conj in enumerate(M)])
+    areaCentr = np.array(areaCentr)
+
     return (areaCentr[:,1].T @ areaCentr[:,0]) / areaCentr[:,0].sum()
 
 
 def sistemaBorroso(x, r, M, S, tipo):
     gA = matrizMembresia1E(x, M, tipo)
-    gAN = np.zeros((r.shape[0], 1))
+    gAN = np.zeros((r.shape[0]))
     gAN[r-1] = gA
     return defuzzificacion(gAN, S, tipo)
 
