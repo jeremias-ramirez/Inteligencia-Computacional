@@ -8,7 +8,7 @@ S = np.array([[-7,-5, -5, -3], [-5, -3, -3, -1], [-3, -1, -1, 0], [-1, 0, 0, 1],
 r = np.array([1, 2, 3, 4, 5 ,6 , 7])
 x = np.arange(-20, 20, 0.5)
 y = mem.sistemaBorrosoMap(x, r, M, S, 1) 
-r2 = np.array([7, 2, 6, 3, 1 ,4 , 5])
+r2 = np.array([7, 6, 5, 4, 3 ,2 , 1])
 y2 = mem.sistemaBorrosoMap(x, r2, M, S, 1) 
 plt.figure(1)
 plt.plot(x, y, x, y2)
