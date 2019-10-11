@@ -84,12 +84,12 @@ def k_medias_tol(data, indexs, k, tol = 0.1, iterMaxTol = 200, iterMaxConv = 200
     return  centroidesMin, distanciaMin, gruposCentroidesMin
 
 
-def gauss_k_medias(data, centroides, k):
+def gauss_k_medias(data, centroides, k, var = 1):
     
     H = data.shape[0]
     transfGauss = np.zeros((H,k))
     for i, centroide in enumerate(centroides):
-        transfGauss[:, i] = np.exp(-0.5 * np.linalg.norm((data[:, :] - centroide), axis = 1) ** 2 )
+        transfGauss[:, i] = np.exp(-0.5 * (np.linalg.norm((data[:, :] - centroide), axis = 1) ** 2) * (1/100) )
 
     return transfGauss 
 

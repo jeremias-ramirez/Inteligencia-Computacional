@@ -15,8 +15,8 @@ H = inData.shape[0]
 indexs = np.arange(0, H, 1)
 np.random.shuffle(indexs)
 
-minK = 24
-maxK = 35
+minK = 4
+maxK = 25
 
 distPromV = np.ones((maxK-minK,1))
 

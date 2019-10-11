@@ -13,7 +13,7 @@ H, W = inData.shape
 indexs = np.arange(0, H, 1)
 np.random.shuffle(indexs)
 
-k = 4
+k = 14
 
 centroides, distancia, _ = km.k_medias_tol(inData,indexs, k, 0.05, 500)
 
