@@ -18,7 +18,7 @@ def membresia(x, vConj, tipo):
 
 def matrizMembresia(xV, M, tipo):
     y = np.zeros((M.shape[0], xV.shape[0])) 
-    y = np.array( list( map( lambda me: list(map(lambda xe: membresia(xe, me, tipo), xV)), M)) )
+    y = np.array( list( map( lambda me: list(map( lambda xe: membresia(xe, me, tipo), xV)), M)) )
     return y
 
 def matrizMembresia1E(x, M, tipo):
