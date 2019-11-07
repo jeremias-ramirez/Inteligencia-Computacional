@@ -6,7 +6,7 @@ Created on Thu Aug 22 16:22:40 2019
 import numpy as np
 import salidasy as salY
 
-def validation(val, yd, w):
+def validation(val, yd, w, funCapas):
     accur = 0
     errC = 0
     
@@ -16,7 +16,7 @@ def validation(val, yd, w):
 
         inputV = np.expand_dims(val[j,:], axis = 1)
     
-        y = salY.salidasy(inputV, w)
+        y = salY.salidasy(inputV, w, funCapas)
 
         ye = yd[j].T
         

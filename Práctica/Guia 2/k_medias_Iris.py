@@ -1,6 +1,5 @@
 import numpy as np
 import k_medias as km
-import multiprocessing as mp
 from matplotlib import pyplot as plt
 
 
@@ -19,8 +18,7 @@ maxK = 27
 
 distPromV = np.ones((maxK-minK,1))
 
-pool = mp.Pool(processes = maxK-minK)
-results = [pool.apply(km.k_medias_tol, (data,indexs, k, 0.05, 200, 200, )) for k in range(minK, maxK)]
+results = [km.k_medias_tol(data,indexs, k, 0.05, 200, 200) for k in range(minK, maxK)]
 
 
 for k in range(minK, maxK):

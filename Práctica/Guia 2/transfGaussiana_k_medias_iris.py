@@ -11,13 +11,16 @@ H, W = data.shape
 indexs = np.arange(0, H, 1)
 np.random.shuffle(indexs)
 
-k = 16
-centroides, distancia, _ = km.k_medias_tol(data,indexs, k, 0.05, 500)
+k = 13
+centroides, distancia, grupoCentroides = km.k_medias_tol(data,indexs, k, 0.05, 500)
+
+varianzas = np.array([np.var(data[indexs[grupoCentroides == i], : ], axis = 0) for i in range(k)])
+var = np.mean( np.mean(varianzas, axis = 1))
 
 transfGauss = km.gauss_k_medias(data, centroides, k)
 
 outputGauss = np.append(transfGauss, y, axis = 1)
 
-#np.savetxt("files/iris_k_medias_" + str(k) + ".csv", outputGauss, delimiter = ",")
+np.savetxt("files/iris_k_medias_" + str(k) + ".csv", outputGauss, delimiter = ",")
 
 

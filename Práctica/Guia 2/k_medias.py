@@ -6,6 +6,9 @@ def distCent(data, indexs, gruposCent, centroides, k):
     sumCentroide = lambda i : np.mean( np.linalg.norm( ( data[ indexs[ gruposCent == i], :] - centroides[i]), axis = 1, ord = 2)) 
     return np.mean([sumCentroide(indexCent) for indexCent in range(k)]) 
 
+def varCentroides(data, indexs, gruposCent, k):
+    return [np.var(data[indexs[gruposCent == i], : ], axis = 0) for i in range(k)]
+
 
 
 
@@ -84,12 +87,12 @@ def k_medias_tol(data, indexs, k, tol = 0.1, iterMaxTol = 200, iterMaxConv = 200
     return  centroidesMin, distanciaMin, gruposCentroidesMin
 
 
-def gauss_k_medias(data, centroides, k, var = 1):
+def gauss_k_medias(data, centroides, k, varianza = 1):
     
     H = data.shape[0]
     transfGauss = np.zeros((H,k))
     for i, centroide in enumerate(centroides):
-        transfGauss[:, i] = np.exp(-0.5 * (np.linalg.norm((data[:, :] - centroide), axis = 1) ** 2) * (1/100) )
+        transfGauss[:, i] = np.exp(-0.5 * (np.linalg.norm((data[:, :] - centroide), axis = 1) ** 2) * (1/varianza) )
 
     return transfGauss 
 
