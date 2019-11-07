@@ -6,7 +6,7 @@ Created on Thu Sep 26 13:45:16 2019
 """
 import numpy as np
 from matplotlib import pyplot as plt
-from Tools.scripts.treesync import raw_input
+
 
 ## determina las neuronas conectadas entre si segun el radio de vecindad.. devuelve un vector de indices que tiene
 ## la fila y columna de la neurona vecina
@@ -37,9 +37,7 @@ def actualizaVecinos(listaVecinos, w, vel, datai):
         w[fila,columna] = w[fila,columna] + vel * (datai-w[fila,columna])
     return w
 
-
 def som(data, hn, wn):
-
     ra_vecindad = 0
     H, W = data.shape
     w = np.zeros((hn,wn,W))
@@ -50,7 +48,7 @@ def som(data, hn, wn):
     vel = 0.01
     
     w_activ = np.zeros((H,1))
-    epoc = 1000
+    epoc = 500
     
     ## Inicializo los pesos al azar
     for i in range(hn):
@@ -59,20 +57,15 @@ def som(data, hn, wn):
              w[i,j,:] = data[np.random.randint(0, H)]
 #    print(w)
 #    print(w.reshape((hn*wn, W))
-    plt.ion()  #habilita grafico interactivo
     for ep in range(epoc):
         ## vario el radio de vecindad segun las epocas
-        if ep < epoc*20/100:
-            ra_vecindad = 2
-    #        vel = 0.45
-        elif ep < epoc*40/100:
-            ra_vecindad -= int(ra_vecindad*0.1)
-     #       vel -= vel * 0.001
+        if ep < 15:
+            ra_vecindad = 2 #muy poquitas neuronas con XOR sino deberia ser 2
+        elif ep < 50:
+            ra_vecindad = 1
         else:
             ra_vecindad = 0
-      #      vel = 1e-6
 #        print("epoca {} ra {}".format(ep,ra_vecindad))
-        j=0
         ## Para cada datos determino la ganadora y sus vecinos 
         for i in range(H):
     #        print(data[i,:])
@@ -132,43 +125,99 @@ def som(data, hn, wn):
         
             w = actualizaVecinos(diagonalSO, w, vel, data[i,:])
 
-
-        plotSOM(w)
-        print("ep {}, ra_vecindad {}, tasa {}".format(ep, ra_vecindad, vel))
     return w_activ
-
-def plotSOM(somcito):
-    plt.cla()
-    for i in range(somcito.shape[0]):
-        for j in range(somcito.shape[1]):
-            plt.scatter(somcito[i,j,0], somcito[i,j,1])
-
-    for i in range(somcito.shape[0]):
-        for j in range(somcito.shape[1]- 1):
-            plt.plot([somcito[i, j, 0], somcito[i, j + 1, 0]], [somcito[i, j, 1], somcito[i, j + 1, 1]], c='g')
-            plt.plot([somcito[j, i, 0], somcito[j + 1, i, 0]], [somcito[j, i, 1], somcito[j + 1, i, 1]], c='b')
-
-  #  plt.show()
-#    for i in range(somcito.shape[0]):
-#        for j in range(somcito.shape[1] - 1):
-#            plt.plot([somcito[i, j, 0], somcito[i, j+1, 0]], [somcito[i, j, 1], somcito[i, j+1, 1]])
-#            plt.scatter(somcito[i, j, 0], somcito[i, j, 1])
-#            plt.scatter(somcito[i, j+1, 0], somcito[i, j+1, 1])
-
-    plt.pause(1e-6)
-    plt.show()
-
-
+        
 #np.random.seed(190000)
-reader = np.genfromtxt("files/circulo.csv", delimiter=',')
-##reader = np.genfromtxt("files/te.csv", delimiter=',')
-data =  reader[:, 0:2]
-#result = reader[:, 2]
-w_activ = som(data, 3, 3)
+reader = np.genfromtxt("files/clouds.csv", delimiter=',')
+data =  reader[:, 0:2] 
+result = reader[:, 2]
+w_activ = som(data, 6, 6)    
 
-plt.waitforbuttonpress()
+#color1 = list(["b", "r", "k", "g", ""])
+color = ['black',    'silver',    'red',        'gold',     'orange',   'salmon', 'green',      
+         'blue',   'blueviolet',  'purple',    'fuchsia',   'yellow',
+         'mediumspringgreen', 'lightseagreen',    'sienna',     'moccasin', 'chartreuse',
+          'darkcyan', 'royalblue', 'pink',     'tan',  'olivedrab',  'tomato','turquoise', 
+          'black',    'silver',    'red',        'gold',     'orange',   'salmon', 'green',      
+         'blue',   'blueviolet',  'purple',    'fuchsia',   'yellow',
+         'mediumspringgreen', 'lightseagreen',    'sienna',     'moccasin', 'chartreuse',]
+color2 = list(["k", "g"])
 
-#for i in range(data.shape[0]):
-#    plt.scatter(data[i, 0], data[i, 1], c = color[int(w_activ[i,0])])
+#clase1 = 0
+#clase2 = 0
+#
+#clase1_1 = 0
+#clase1_2 = 0
+#
+#clase2_1 = 0
+#clase2_2 = 0
 
+v_clases = np.zeros((36,1))
+clase1 = np.zeros((v_clases.shape[0], 2))
+#clase2 = np.zeros((v_clases.shape[0], 2))
+
+for i in range(data.shape[0]):
+
+#    if int(w_activ[i,0])> 22:
+#        col += 1 
+#    else:
+#        col = int(w_activ[i,0])
+    col = int(w_activ[i,0])
+    plt.scatter(data[i, 0], data[i, 1], c = color[col])
+#    if w_activ[i, 0] == 0:
+#        clase1 += 1
+#        if result[i] == 0: 
+#            clase1_1 += 1
+#        else:
+#            clase1_2 += 1
+#    else:
+#        clase2 += 1
+#        if result[i] == 0: 
+#            clase2_1 += 1
+#        else:
+#            clase2_2 += 1
+    j = int(w_activ[i,0])
+    v_clases[j] += 1 
+    if result[i] == 0: 
+        clase1[j][0] += 1
+    else:
+        clase1[j][1] += 1
+plt.show()
+
+for i in range(data.shape[0]):
+
+    plt.scatter(data[i, 0], data[i, 1], c = color2[int(result[i])])
+    
+plt.show()    
+
+#print("Clase 1: {}".format(clase1))
+#print("Clase 2: {}".format(clase2))
+
+for i in range(clase1.shape[0]):    
+    print("Clase {} que son 0: {}".format(i,clase1[i][0]))
+    print("Clase {} que son 1: {}".format(i, clase1[i][1]))
+    
+m_confusion = np.zeros((4,1))
+
+for i in range(clase1.shape[0]):
+    if clase1[i][0] > clase1[i][1]:
+        print("La clase {} representa los 0 con el color {}".format(i, color[i]))
+    else:
+        print("La clase {} representa los 1 con el color {}".format(i, color[i]))
+        
+
+    m_confusion[0] = (m_confusion[0] + clase1[i][0]) if clase1[i][0] > clase1[i][1] else (m_confusion[0])
+    m_confusion[1] = (m_confusion[1] + clase1[i][1]) if clase1[i][0] > clase1[i][1] else (m_confusion[1])
+    m_confusion[2] = (m_confusion[2] + clase1[i][0]) if clase1[i][0] < clase1[i][1] else (m_confusion[2])
+    m_confusion[3] = (m_confusion[3] + clase1[i][1]) if clase1[i][0] < clase1[i][1] else (m_confusion[3])
+
+print("verdadero - verdadero {} - {}%".format(m_confusion[0], (m_confusion[0]/(m_confusion[0]+m_confusion[1]))*100))
+print("verdadero - falso {} - {}%".format(m_confusion[1], (m_confusion[1]/(m_confusion[0]+m_confusion[1]))*100))
+print("falso - verdadero {} - {}%".format(m_confusion[2], (m_confusion[2]/(m_confusion[2]+m_confusion[3]))*100))
+print("falso - falso {}- {}%".format(m_confusion[3], (m_confusion[3]/(m_confusion[2]+m_confusion[3]))*100))
+
+
+
+#print("Clase 2 que son 0: {}".format(clase2_1))
+#print("Clase 2 que son 1: {}".format(clase2_2))
 
