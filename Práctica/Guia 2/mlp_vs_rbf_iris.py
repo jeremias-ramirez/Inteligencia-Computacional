@@ -2,12 +2,8 @@ import numpy as np
 import sys
 sys.path.append("../")
 
-import initialize_w as initW
 import trainning as trnD
-import partitions as prt
-
 from matplotlib import pyplot as plt
-import multiprocessing as mp
 
 
 # poner fijo la semilla para que todos los pesos de distintas red tengan los mismo valores
@@ -15,21 +11,24 @@ np.random.seed(1568982731)
 
 data1 = np.genfromtxt("files/irisbin.csv", delimiter=',')
 
-data2 = np.genfromtxt("files/iris_k_medias_16.csv", delimiter=',')
+data2 = np.genfromtxt("files/iris_k_medias_13.csv", delimiter=',')
 
 vel = 0.2
 velM = 0.5
-epoc = 100
+epoc = 10
 k = 30
 
 lenIn_1 = 4
-estrucRed1 = [8, 6, 3]
+estrucRed1 = [[8, 6, 3], ["sigmoid", "sigmoid","sigmoid"]]
 
-lenIn_2 = 16
-estrucRed2 = [3]
+lenIn_2 = 13
+estrucRed2 = [[3], ["linear"]]
 
+print("Entrenamiento MLP")
 results1 = trnD.trainningPar(data1, k, lenIn_1, estrucRed1, epocas = epoc, velM =velM)
-results2 = trnD.trainningPar(data2, k, lenIn_2, estrucRed1, epocas = epoc, velM =velM)
+
+print("Entrenamiento RBF")
+results2 = trnD.trainningPar(data2, k, lenIn_2, estrucRed2, epocas = epoc, velM =velM)
 
 figAcc = plt.figure(1)
 figErr = plt.figure(2)

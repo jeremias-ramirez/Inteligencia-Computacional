@@ -1,30 +1,24 @@
 import numpy as np
 import k_medias as km
-import multiprocessing as mp
 from matplotlib import pyplot as plt
 
 
 reader = np.genfromtxt("files/merval.csv", delimiter=',')
-
-data = np.array([ reader[i * 5 : (i+1) * 5] for i in range(int(reader.shape[0] / 5)) ])
-
-inData = data[:, 0:4]
-yd = np.expand_dims(data[:,4], axis = 1)
+#armar al base de datos
+data = np.array([ reader[i * 6 : (i+1) * 6] for i in range(int(reader.shape[0] / 6)) ])
+inData = data[:, 0:5]
+yd = np.expand_dims(data[:,5], axis = 1)
 
 H = inData.shape[0]
 indexs = np.arange(0, H, 1)
 np.random.shuffle(indexs)
 
-minK = 4
-maxK = 25
+minK = 15
+maxK = 35
 
 distPromV = np.ones((maxK-minK,1))
 
-pool = mp.Pool(processes = maxK-minK)
-argumentsL = [(inData, indexs, k, 0.05, 400, 200) for k in range(minK, maxK)]
-
-
-results = pool.starmap(km.k_medias_tol, argumentsL)
+results = [km.k_medias_tol(inData, indexs, k, 0.05, 400, 200) for k in range(minK, maxK)]
 
 for k in range(minK, maxK):
     distPromV[k-minK] = results[k-minK][1]
